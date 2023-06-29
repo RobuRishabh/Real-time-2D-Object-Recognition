@@ -78,23 +78,10 @@ Image processing is used to extract different features in an image. To do this, 
 A Blob, in a sense, is anything that is considered a large object or anything bright in a dark background. In images, we can generalize it as a group of pixel values that forms a somewhat colony or a large object that is distinguishable from its background. Using image processing, we can detect such blobs in an image.
 
 ### What is the centroid of a shape ?
-The centroid of a shape is the arithmetic mean (i.e. the average) of all the points in a shape. Suppose a shape consists of n distinct points x_1...x_n
-centroid is given by
-```
-c = \frac{1}{n} \sum^n_{i=1} \mathbf{x}_i\]
-```
+The centroid of a shape is the arithmetic mean (i.e. the average) of all the points in a shape. 
 ### Image Moments
 We can find the center of the blob using * **moments()** in OpenCV. But first of all, we should know what exactly Image moment is all about. In computer vision and image processing, image moments are often used to characterize the shape of an object in an image. These moments capture basic information such as the area of the object, the centroid (i.e. the center (x, y)-coordinates of the object), the orientation, and other desirable properties. 
 Image Moment is a particular weighted average of image pixel intensities, with the help of which we can find some specific properties of an image, like radius, area, centroid etc. To find the centroid of the image, we generally convert it to binary format and then find its center.
-
-The centroid is given by the formula:-
-```
-
-    \[C_x = \cfrac{M_{10}}{M_{00}}\]
-
-    \[C_y = \cfrac{M_{01}}{M_{00}}\]
-```
-C_x is the x coordinate and C_y is the y coordinate of the centroid and M denotes the Moment.
 
 ```
 cv::moments(InputArray array, bool binaryImage = false);
