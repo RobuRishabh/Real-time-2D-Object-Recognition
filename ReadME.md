@@ -51,13 +51,13 @@ OpenCV provides a function for computing moments, which will be used to calculat
 ### RotatedRect object type
 The last useful class is a particular rectangle called RotatedRect. This class represents a rotated rectangle specified by a center point, the width and height of a rectangle, and the rotation angle in degrees:
 
-'''
-cv::RotatedRect::RotatedRect(const Point2f &center, const Size2f &size,float angle)**
+```
+cv::RotatedRect::RotatedRect(const Point2f &center, const Size2f &size,float angle)
 Parameters
 center :- The rectangle mass center
 size :- Width and height of the rectangle
 angle :- The rotation angle in a clockwise direction. When the angle is 0, 90, 180, 270 etc., the rectangle becomes an up-right rectangle
-'''
+```
 
 An interesting function of this class is boundingBox. This function returns Rect, which contains the rotated rectangle:
 <img src="images/Bounding_Box.png" width=1000px>
@@ -66,9 +66,9 @@ An interesting function of this class is boundingBox. This function returns Rect
 The bounding rectangle is drawn with a minimum area. Because of this, rotation is also considered. The below image shows 2 rectangles, the green one is the normal bounding rectangle while the red one is the minimum area rectangle. See how the red rectangle is rotated.
 <img src="images/BB.png" width=1000px>
 
-'''
+```
 cv::minAreaRect(InputArray points);	
-'''
+```
 
 The function calculates and returns the minimum-area bounding rectangle (possibly rotated) for a specified point set.
 
@@ -78,26 +78,27 @@ Image processing is used to extract different features in an image. To do this, 
 A Blob, in a sense, is anything that is considered a large object or anything bright in a dark background. In images, we can generalize it as a group of pixel values that forms a somewhat colony or a large object that is distinguishable from its background. Using image processing, we can detect such blobs in an image.
 
 ### What is the centroid of a shape ?
-The centroid of a shape is the arithmetic mean (i.e. the average) of all the points in a shape. Suppose a shape consists of n distinct points \mathbf{x_1}... \mathbf{x_n}
+The centroid of a shape is the arithmetic mean (i.e. the average) of all the points in a shape. Suppose a shape consists of n distinct points x_1...x_n
 centroid is given by
-
-    \[\mathbf{c} = \frac{1}{n} \sum^n_{i=1} \mathbf{x}_i\]
-
+```
+c = \frac{1}{n} \sum^n_{i=1} \mathbf{x}_i\]
+```
 ### Image Moments
 We can find the center of the blob using * **moments()** in OpenCV. But first of all, we should know what exactly Image moment is all about. In computer vision and image processing, image moments are often used to characterize the shape of an object in an image. These moments capture basic information such as the area of the object, the centroid (i.e. the center (x, y)-coordinates of the object), the orientation, and other desirable properties. 
 Image Moment is a particular weighted average of image pixel intensities, with the help of which we can find some specific properties of an image, like radius, area, centroid etc. To find the centroid of the image, we generally convert it to binary format and then find its center.
 
 The centroid is given by the formula:-
+```
 
     \[C_x = \cfrac{M_{10}}{M_{00}}\]
 
     \[C_y = \cfrac{M_{01}}{M_{00}}\]
-
+```
 C_x is the x coordinate and C_y is the y coordinate of the centroid and M denotes the Moment.
 
-'''
+```
 cv::moments(InputArray array, bool binaryImage = false);
-'''
+```
 
 ### Steps for finding Centroid of a Blob in OpenCV
 To find the center of the blob, we will perform the following steps:-
@@ -108,14 +109,14 @@ To find the center of the blob, we will perform the following steps:-
 ### Center of multiple blobs in an Image
 Finding the center in case of multiple blobs, we use the function * **findContours()**,to find the number of contours in the Image and find the center of each of them, where the contour is the list of all the contours present in the image.
 
-'''
+```
 void cv::findContours(InputOutputArray image,
 		OutputArrayOfArrays contours,
 		OutputArray hierarchy,
 		int mode,
 		int method,
 		Point offset = Point())
-'''
+```
 
 ### What are Hu Moments?
 It is great that central moments are translation invariant. But that is not enough for shape matching. We would like to calculate moments that are invariant to translation, scale, and rotation.
@@ -146,7 +147,7 @@ Regardless, it is important to note that our HuMoments shape descriptor will onl
 
 This feature vector can be used to quantify and represent the shape of an object in an image.
 
-'''
+```
 // convert input image to grayscale
 cv::Mat im = imread(filename, IMREAD_GRAYSCALE);
 // Threshold image
@@ -164,7 +165,7 @@ for(int i = 0; i < 7; i++) {
 double d1 = matchShapes(im1, im2, CONTOURS_MATCH_I1, 0); 
 double d2 = matchShapes(im1, im2, CONTOURS_MATCH_I2, 0); 
 double d3 = matchShapes(im1, im2, CONTOURS_MATCH_I3, 0);
-'''
+```
 
 - getBoundingBox(Mat &region, double x, double y, double alpha): This function calculates the rotated bounding box of a given region. It takes the region image, centroid coordinates, and the angle of rotation as input and returns a rotated rectangle (RotatedRect) that tightly encloses the region.
 
