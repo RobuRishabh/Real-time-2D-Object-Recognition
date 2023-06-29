@@ -60,11 +60,11 @@ angle :- The rotation angle in a clockwise direction. When the angle is 0, 90, 1
 '''
 
 An interesting function of this class is boundingBox. This function returns Rect, which contains the rotated rectangle:
-<img src="images/Bounding_Box.png" width=500px>
+<img src="images/Bounding_Box.png" width=1000px>
 
 ### Minimum Area Rectangle
 The bounding rectangle is drawn with a minimum area. Because of this, rotation is also considered. The below image shows 2 rectangles, the green one is the normal bounding rectangle while the red one is the minimum area rectangle. See how the red rectangle is rotated.
-<img src="images/BB.png" width=500px>
+<img src="images/BB.png" width=1000px>
 
 '''
 cv::minAreaRect(InputArray points);	
@@ -132,7 +132,7 @@ We can then compare two feature vectors using a similarity metric or distance fu
 Normally, we obtain the shape after applying some sort of segmentation (i.e. setting the background pixels to black and the foreground pixels to white). Thresholding is the most common approach to obtain our segmentation. After we have performed thresholding we have the silhouette of the object in the image. We could also find the contours of the silhouette and draw them, thus creating an outline of the object.
 
 Regardless of which method we choose, we can still apply the HuMoments shape descriptors provided that we obtain consistent representations across all images.
-<img src="images/diamond.png" width=500px>
+<img src="images/diamond.png" width=1000px>
 This image is of a diamond, where the black pixels correspond to the background of the image and the white pixels correspond to the foreground. This is an example of a silhouette of an object in an image. If we had just the border of the diamond, it would be the outline of the object.
 
 Regardless, it is important to note that our HuMoments shape descriptor will only be computed over the white pixels.
