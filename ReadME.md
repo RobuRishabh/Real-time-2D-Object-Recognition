@@ -21,7 +21,7 @@ The task is to implement a thresholding algorithm for a video to separate object
 
 To improve the accuracy of the thresholding, some pre-processing techniques can be applied. These include blurring the image to make regions more uniform and adjusting the intensity of strongly colored pixels to differentiate them from the background. The objects used in the video should be darker than the background, and the overall lighting conditions should be well-lit for better visibility.
 
-Markup : * threshold(Mat &image) This function converts an image to grayscale and then applies a thresholding operation. It sets any pixel with a value less than or equal to 130 as foreground (white), and other pixels as background (black). The function returns the thresholded image as a grayscale Mat.
+- threshold(Mat &image) This function converts an image to grayscale and then applies a thresholding operation. It sets any pixel with a value less than or equal to 130 as foreground (white), and other pixels as background (black). The function returns the thresholded image as a grayscale Mat.
 
 ## Task 2 - Cleanup the binary image
 The task is to improve the quality of the thresholded binary image by applying morphological filtering. This filtering technique helps in addressing issues such as noise, holes, or other imperfections in the image. The goal is to choose a strategy, either growing or shrinking the image regions, to enhance the image quality.
@@ -31,7 +31,7 @@ Morphological filters basically modifies the shape and structure of the image us
 2. erosion shrinks or reduces them. 
 By selecting an appropriate strategy, we can effectively remove noise or fill holes in the thresholded image.
 
-Markup : * cleanup(Mat &image): This function performs image cleanup by applying dilation followed by erosion. It helps to remove small noise and smooth the binary image. The function uses a predefined kernel for the morphological operations and returns the cleaned up image as a Mat.
+- cleanup(Mat &image): This function performs image cleanup by applying dilation followed by erosion. It helps to remove small noise and smooth the binary image. The function uses a predefined kernel for the morphological operations and returns the cleaned up image as a Mat.
 
 ## Task 3 - Segment the image into regions
 The task is to implement connected components analysis on a thresholded and cleaned image to segment it into regions. 
@@ -39,7 +39,7 @@ The connected components analysis algorithm identifies distinct regions in an im
 
 Additionally, the system should have the ability to ignore small regions and limit the recognition to the largest N regions if desired. The OpenCV library provides a connected components function that can be used for this purpose, which also returns statistics about the regions.
 
-Markup : * getRegions(Mat &image, Mat &labeledRegions, Mat &stats, Mat &centroids, vector<int> &topNLabels): This function extracts the largest three regions from a given image. It uses the connected component labeling algorithm to label each pixel in the image with a unique region label. The function then calculates the area of each labeled region and selects the largest three regions that meet a certain area threshold. The function returns an image where each region is colored with a random color and updates the topNLabels vector with the labels of the largest regions.
+- getRegions(Mat &image, Mat &labeledRegions, Mat &stats, Mat &centroids, vector<int> &topNLabels): This function extracts the largest three regions from a given image. It uses the connected component labeling algorithm to label each pixel in the image with a unique region label. The function then calculates the area of each labeled region and selects the largest three regions that meet a certain area threshold. The function returns an image where each region is colored with a random color and updates the topNLabels vector with the labels of the largest regions.
 
 ## Task 4 - Compute features for each major region
 The task is to implement a function that computes a set of features for a specific region in an image. The function takes a region map and a region ID as input. The goal is to calculate features that are invariant to translation, scale, and rotation, such as moments around the central axis of rotation.
@@ -50,6 +50,7 @@ OpenCV provides a function for computing moments, which will be used to calculat
 
 ### RotatedRect object type
 The last useful class is a particular rectangle called RotatedRect. This class represents a rotated rectangle specified by a center point, the width and height of a rectangle, and the rotation angle in degrees:
+
 '''
 cv::RotatedRect::RotatedRect(const Point2f &center, const Size2f &size,float angle)**
 Parameters
@@ -57,15 +58,18 @@ center :- The rectangle mass center
 size :- Width and height of the rectangle
 angle :- The rotation angle in a clockwise direction. When the angle is 0, 90, 180, 270 etc., the rectangle becomes an up-right rectangle
 '''
+
 An interesting function of this class is boundingBox. This function returns Rect, which contains the rotated rectangle:
-<img src="images/Bounding_Box.png" width=1500px>
+<img src="images/Bounding_Box.png" width=500px>
 
 ### Minimum Area Rectangle
 The bounding rectangle is drawn with a minimum area. Because of this, rotation is also considered. The below image shows 2 rectangles, the green one is the normal bounding rectangle while the red one is the minimum area rectangle. See how the red rectangle is rotated.
-<img src="images/BB.png" width=1500px>
+<img src="images/BB.png" width=500px>
+
 '''
 cv::minAreaRect(InputArray points);	
 '''
+
 The function calculates and returns the minimum-area bounding rectangle (possibly rotated) for a specified point set.
 
 ### What is a Blob ?
@@ -90,8 +94,9 @@ The centroid is given by the formula:-
     \[C_y = \cfrac{M_{01}}{M_{00}}\]
 
 C_x is the x coordinate and C_y is the y coordinate of the centroid and M denotes the Moment.
+
 '''
-cv::moments 	(InputArray array, bool binaryImage = false);
+cv::moments(InputArray array, bool binaryImage = false);
 '''
 
 ### Steps for finding Centroid of a Blob in OpenCV
@@ -102,6 +107,7 @@ To find the center of the blob, we will perform the following steps:-
 
 ### Center of multiple blobs in an Image
 Finding the center in case of multiple blobs, we use the function * **findContours()**,to find the number of contours in the Image and find the center of each of them, where the contour is the list of all the contours present in the image.
+
 '''
 void cv::findContours(InputOutputArray image,
 		OutputArrayOfArrays contours,
@@ -126,7 +132,7 @@ We can then compare two feature vectors using a similarity metric or distance fu
 Normally, we obtain the shape after applying some sort of segmentation (i.e. setting the background pixels to black and the foreground pixels to white). Thresholding is the most common approach to obtain our segmentation. After we have performed thresholding we have the silhouette of the object in the image. We could also find the contours of the silhouette and draw them, thus creating an outline of the object.
 
 Regardless of which method we choose, we can still apply the HuMoments shape descriptors provided that we obtain consistent representations across all images.
-<img src="images/diamond.png" width=1500px>
+<img src="images/diamond.png" width=500px>
 This image is of a diamond, where the black pixels correspond to the background of the image and the white pixels correspond to the foreground. This is an example of a silhouette of an object in an image. If we had just the border of the diamond, it would be the outline of the object.
 
 Regardless, it is important to note that our HuMoments shape descriptor will only be computed over the white pixels.
@@ -139,6 +145,7 @@ Regardless, it is important to note that our HuMoments shape descriptor will onl
 6. Finally, flatten the array to form the shape feature vector.
 
 This feature vector can be used to quantify and represent the shape of an object in an image.
+
 '''
 // convert input image to grayscale
 cv::Mat im = imread(filename, IMREAD_GRAYSCALE);
@@ -159,15 +166,15 @@ double d2 = matchShapes(im1, im2, CONTOURS_MATCH_I2, 0);
 double d3 = matchShapes(im1, im2, CONTOURS_MATCH_I3, 0);
 '''
 
-Markup : * getBoundingBox(Mat &region, double x, double y, double alpha): This function calculates the rotated bounding box of a given region. It takes the region image, centroid coordinates, and the angle of rotation as input and returns a rotated rectangle (RotatedRect) that tightly encloses the region.
+- getBoundingBox(Mat &region, double x, double y, double alpha): This function calculates the rotated bounding box of a given region. It takes the region image, centroid coordinates, and the angle of rotation as input and returns a rotated rectangle (RotatedRect) that tightly encloses the region.
 
-Markup : * drawLine(Mat &image, double x, double y, double alpha, Scalar color): This function draws a line on the given image starting from the specified coordinates (x, y) and with the specified angle (alpha). The line has a length of 100 pixels and is drawn with the specified color.
+- drawLine(Mat &image, double x, double y, double alpha, Scalar color): This function draws a line on the given image starting from the specified coordinates (x, y) and with the specified angle (alpha). The line has a length of 100 pixels and is drawn with the specified color.
 
-Markup : * drawBoundingBox(Mat &image, RotatedRect boundingBox, Scalar color): This function draws a rotated bounding box on the given image. It takes a RotatedRect object representing the bounding box and a color as input and draws the box on the image.
+- drawBoundingBox(Mat &image, RotatedRect boundingBox, Scalar color): This function draws a rotated bounding box on the given image. It takes a RotatedRect object representing the bounding box and a color as input and draws the box on the image.
 
-Markup : * calcHuMoments(Moments mo, vector<double> &huMoments): This function calculates the Hu Moments from the given central moments. It takes a Moments object containing the central moments and updates the huMoments vector with the seven attributes of Hu Moments.
+- calcHuMoments(Moments mo, vector<double> &huMoments): This function calculates the Hu Moments from the given central moments. It takes a Moments object containing the central moments and updates the huMoments vector with the seven attributes of Hu Moments.
 
-Markup : * euclideanDistance(vector<double> features1, vector<double> features2): This function calculates the normalized Euclidean distance between two vectors. It takes two feature vectors as input and returns the normalized distance as a double value.
+- euclideanDistance(vector<double> features1, vector<double> features2): This function calculates the normalized Euclidean distance between two vectors. It takes two feature vectors as input and returns the normalized distance as a double value.
 
 
 # Task 5 - Collect training data
@@ -200,10 +207,10 @@ Here's a simplified explanation of the task:
 5. The label of the closest matching feature vector will be assigned to the unknown object, indicating its classification.
 6. The system will then indicate the label of the object on the output video stream, typically by overlaying the label onto the video feed.
 
-Markup : * classifier(vector<vector<double>> featureVectors, vector<string> classNames, vector<double> currentFeature): This function performs object classification based on the nearest neighbor approach using normalized Euclidean distance. It takes a vector of known feature vectors, a vector of corresponding class names, and the feature vector of the object to be classified. The function returns the inferred class name for the given feature vector.
+- classifier(vector<vector<double>> featureVectors, vector<string> classNames, vector<double> currentFeature): This function performs object classification based on the nearest neighbor approach using normalized Euclidean distance. It takes a vector of known feature vectors, a vector of corresponding class names, and the feature vector of the object to be classified. The function returns the inferred class name for the given feature vector.
 
 # Task 7 - KNN Classifier
-Markup : * classifierKNN(vector<vector<double>> featureVectors, vector<string> classNames, vector<double> currentFeature, int K): This function performs object classification based on the K-Nearest Neighbor (KNN) approach using normalized Euclidean distance. It takes a vector of known feature vectors, a vector of corresponding class names, the feature vector of the object to be classified, and the value of K. The function returns the inferred class name for the given feature vector.
+- classifierKNN(vector<vector<double>> featureVectors, vector<string> classNames, vector<double> currentFeature, int K): This function performs object classification based on the K-Nearest Neighbor (KNN) approach using normalized Euclidean distance. It takes a vector of known feature vectors, a vector of corresponding class names, the feature vector of the object to be classified, and the value of K. The function returns the inferred class name for the given feature vector.
 
 # Task 8 - Evaluate the performance of your system
 The task requires evaluating the performance of the system on multiple images of each object and creating a confusion matrix to compare the true labels of the objects with the labels assigned by the system. The confusion matrix provides a summary of the classification results, showing the number of correct and incorrect classifications for each class.
@@ -215,7 +222,7 @@ Here's an overview of the task:
 4. Build a confusion matrix to summarize the classification results. The confusion matrix is a table that shows the counts of true positives, false positives, true negatives, and false negatives for each class.
 5. Print the confusion matrix in CSV format, which makes it easier to copy and paste into a report or spreadsheet.
 
-Markup : * getClassName(char c): This function maps a character code to a corresponding class name. It returns the class name as a string based on the provided
+- getClassName(char c): This function maps a character code to a corresponding class name. It returns the class name as a string based on the provided
 
 
 References:
@@ -226,5 +233,4 @@ References:
 - https://pyimagesearch.com/2014/10/27/opencv-shape-descriptor-hu-moments-example/
 - https://theailearner.com/tag/cv2-minarearect/
 - https://learnopencv.com/shape-matching-using-hu-moments-c-python/
--
 
